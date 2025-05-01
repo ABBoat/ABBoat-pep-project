@@ -9,25 +9,50 @@ import java.util.List;
 
 public class AccountDAO {
 
+    //Check database for username existence before insertion
+    public boolean doesAccountExist(String username) {
+        Connection conn = ConnectionUtil.getConnection();
+        try {
+            //SQL logic
+            String sql = "SELECT * FROM account WHERE username = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            //PreparedStatement setters
+            ps.setString(1, username);
+
+            //SQL execution and result 
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                return true;
+            }
+        } 
+        catch(SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
     //Insert account into Account table. account_id is auto generated 
     public Account insertAccount(Account account) {
         Connection conn = ConnectionUtil.getConnection();
         try {
-            //SQL logic
             String sql = "INSERT INTO account (username, password) VALUES (?, ?);";
             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            //PreparedStatement setters
             ps.setString(1, account.getUsername());
             ps.setString(2, account.getPassword());
 
-            //SQL execution, result, and method rules
             ps.executeUpdate();
-            ResultSet pkeyResultSet = ps.getGeneratedKeys();
+            ResultSet pkeyrs = ps.getGeneratedKeys();
+            if(pkeyrs.next()) {
+                int generated_account_id = (int) pkeyrs.getLong(1);
+                return new Account(generated_account_id, account.getUsername(), account.getPassword());
+            }
         }
         catch(SQLException e) {
-
+            System.out.println(e.getMessage());
         }
+        return null;
     }
 
 }
