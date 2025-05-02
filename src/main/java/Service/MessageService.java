@@ -18,5 +18,13 @@ public class MessageService {
         this.messageDAO = messageDAO;
     }
 
-    //Persist message to database, check conditions. Is 
+    //Persist message to database, check conditions. Is the message blank?
+    //Is the message no more than 255 charcaters? Is it attached to an existing
+    //user?
+    public Message addMessage(Message newMessage) {
+        if(!newMessage.getMessage_text().isEmpty()) {
+            return messageDAO.createMessage(newMessage);
+        }
+        return null;
+    }
 }
