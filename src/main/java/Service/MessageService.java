@@ -2,18 +2,20 @@ package Service;
 
 import Model.Message;
 import DAO.MessageDAO;
+import DAO.AccountDAO;
 
 import java.util.List;
 
 public class MessageService {
     public MessageDAO messageDAO;
+    public AccountDAO accountDAO;
 
     //No-args constructor creates MessageDAO
     public MessageService() {
         messageDAO = new MessageDAO();
     }
 
-    //Parameter constructor for when AccountDAO is provided
+    //Parameter constructor for when MessageDAO is provided
     public MessageService (MessageDAO messageDAO) {
         this.messageDAO = messageDAO;
     }
@@ -22,9 +24,15 @@ public class MessageService {
     //Is the message no more than 255 charcaters? Is it attached to an existing
     //user?
     public Message addMessage(Message newMessage) {
-        if(!newMessage.getMessage_text().isEmpty()) {
+        if(!newMessage.getMessage_text().isEmpty() 
+        && newMessage.getMessage_text().length() <= 255) 
+        {
             return messageDAO.createMessage(newMessage);
         }
         return null;
+    }
+
+    public Message getMessageById(int id) {
+        return messageDAO.getMessageById(id);
     }
 }

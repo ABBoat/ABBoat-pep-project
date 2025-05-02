@@ -1,5 +1,6 @@
 package DAO;
 
+//import Model.Account;
 import Model.Message;
 import Util.ConnectionUtil;
 
@@ -26,11 +27,35 @@ public class MessageDAO {
             if(pkeyrs.next()) {
                 int generated_message_id = (int) pkeyrs.getLong(1);
                 return new Message(generated_message_id, 
-                message.getPosted_by(), message.getMessage_text(), 
+                message.getPosted_by(), 
+                message.getMessage_text(), 
                 message.getTime_posted_epoch());
             }
         }
         catch(SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public Message getMessageById(int id) {
+        Connection conn = ConnectionUtil.getConnection();
+        try {
+            String sql = "SELECT * FROM message WHERE message_id = ?;";
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setInt(1, id);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                Message idMessage = new Message(rs.getInt("message_id"), 
+                rs.getInt("posted_by"),
+                rs.getString("message_text"), 
+                rs.getInt("time_posted_epoch"));
+                return idMessage;
+            }
+        }
+        catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return null;

@@ -58,19 +58,21 @@ public class AccountDAO {
     }
 
     //Login into account, return info from database w/ generated id
-    public Account loginToAccount(String username, String password) {
+    public Account loginToAccount(Account account) {
         Connection conn = ConnectionUtil.getConnection();
         try {
-            String sql = "SELECT * FROM account WHERE username = ?;";
+            String sql = "SELECT * FROM account WHERE username = ? AND password = ?;";
             PreparedStatement ps = conn.prepareStatement(sql);
 
-            ps.setString(1, username);
+            ps.setString(1, account.getUsername());
+            ps.setString(2, account.getPassword());
 
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                Account account = new Account(rs.getInt("account_id"),
-                    rs.getString("username"), rs.getString("password"));
-                return account;
+                Account loggedAccount = new Account(rs.getInt("account_id"),
+                    rs.getString("username"), 
+                    rs.getString("password"));
+                return loggedAccount;
             }
         }
         catch(SQLException e) {

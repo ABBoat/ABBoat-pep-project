@@ -32,9 +32,8 @@ public class AccountService {
 
     //Check conditions for login. Do username and password match an existing account?
     public Account validateAccount(Account account) {
-        if(accountDAO.doesAccountExist(account.getUsername()))
-        {
-            return accountDAO.loginToAccount(account.getUsername(), account.getPassword());
+        if(accountDAO.doesAccountExist(account.getUsername())) {
+            return accountDAO.loginToAccount(account);
         }
         return null;
     }

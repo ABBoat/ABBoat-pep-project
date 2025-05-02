@@ -16,8 +16,8 @@ public class SocialMediaController {
     MessageService messageService;
 
     public SocialMediaController() {
-        this.accountService = new AccountService();
-        this.messageService = new MessageService();
+        accountService = new AccountService();
+        messageService = new MessageService();
     }
 
     //Endpoints 
@@ -26,6 +26,7 @@ public class SocialMediaController {
         app.post("/register", this::postAccountHandler);
         app.post("/login", this::logintoAccountHandler);
         app.post("/messages", this::postMessageHandler);
+        app.get("/messages/{message_id}", this::getMessageByIdHandler);
 
         return app;
     }
@@ -67,4 +68,15 @@ public class SocialMediaController {
         }
     }
     
+    private void getMessageByIdHandler(Context ctx) throws JsonProcessingException {
+        int id = Integer.parseInt(ctx.pathParam("message_id"));
+        Message message = messageService.getMessageById(id);
+        if (message == null) {
+            ctx.result("");
+        }
+        else {
+            ctx.json(message);
+        }
+        ctx.status(200);
+    }
 }
