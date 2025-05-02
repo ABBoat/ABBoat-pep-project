@@ -41,7 +41,8 @@ public class AccountDAO {
 
             ps.setString(1, account.getUsername());
             ps.setString(2, account.getPassword());
-
+            
+            //SQL execution and result, auto generated account_id is returned
             ps.executeUpdate();
             ResultSet pkeyrs = ps.getGeneratedKeys();
             if(pkeyrs.next()) {
@@ -63,6 +64,13 @@ public class AccountDAO {
             PreparedStatement ps = conn.prepareStatement(sql);
 
             ps.setString(1, username);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                Account account = new Account(rs.getInt("account_id"),
+                    rs.getString("username"), rs.getString("password"));
+                return account;
+            }
         }
         catch(SQLException e) {
             System.out.println(e.getMessage());

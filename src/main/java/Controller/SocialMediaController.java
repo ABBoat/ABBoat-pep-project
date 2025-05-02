@@ -32,7 +32,7 @@ public class SocialMediaController {
     public Javalin startAPI() {
         Javalin app = Javalin.create();
         app.post("/register", this::postAccountHandler);
-        app.post("/login", this::postAccountHandler);
+        //app.post("/login", this::postAccountHandler);
 
         return app;
     }
