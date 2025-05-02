@@ -23,7 +23,7 @@ public class AccountService {
     public Account addAccount(Account newAccount) {
         if(!accountDAO.doesAccountExist(newAccount.getUsername())
             && newAccount.getUsername().trim().length() > 0
-            && newAccount.getPassword().length() >= 4)
+            && newAccount.getPassword().length() >= 4) 
         {
             return accountDAO.insertAccount(newAccount);
         }
@@ -31,8 +31,11 @@ public class AccountService {
     }
 
     //Check conditions for login. 
-    public Account validAccount(Account account) {
-        if(accountDAO.doesAccountExist(account.getUsername())
-        && account.getPassword() )
+    public Account validateAccount(Account account) {
+        if(accountDAO.doesAccountExist(account.getUsername()))
+        {
+            return accountDAO.loginToAccount(account.getUsername(), account.getPassword());
+        }
+        return null;
     }
 }
