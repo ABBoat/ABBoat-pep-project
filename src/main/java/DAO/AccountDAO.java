@@ -32,7 +32,7 @@ public class AccountDAO {
         return false;
     }
 
-    //Insert account into Account table. account_id is auto generated 
+    //Create and insert account into Account table. account_id is auto generated 
     public Account insertAccount(Account account) {
         Connection conn = ConnectionUtil.getConnection();
         try {
@@ -47,7 +47,8 @@ public class AccountDAO {
             ResultSet pkeyrs = ps.getGeneratedKeys();
             if(pkeyrs.next()) {
                 int generated_account_id = (int) pkeyrs.getLong(1);
-                return new Account(generated_account_id, account.getUsername(), account.getPassword());
+                return new Account(generated_account_id, 
+                account.getUsername(), account.getPassword());
             }
         }
         catch(SQLException e) {
@@ -56,7 +57,7 @@ public class AccountDAO {
         return null;
     }
 
-    //
+    //Login into account, return info from database w/ generated id
     public Account loginToAccount(String username, String password) {
         Connection conn = ConnectionUtil.getConnection();
         try {
