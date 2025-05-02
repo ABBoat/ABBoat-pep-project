@@ -14,7 +14,7 @@ public class AccountDAO {
         Connection conn = ConnectionUtil.getConnection();
         try {
             //SQL logic
-            String sql = "SELECT * FROM account WHERE username = ?";
+            String sql = "SELECT * FROM account WHERE username = ?;";
             PreparedStatement ps = conn.prepareStatement(sql);
 
             //PreparedStatement setters
@@ -55,4 +55,18 @@ public class AccountDAO {
         return null;
     }
 
+    //
+    public Account loginToAccount(String username, String password) {
+        Connection conn = ConnectionUtil.getConnection();
+        try {
+            String sql = "SELECT * FROM account WHERE username = ?;";
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setString(1, username);
+        }
+        catch(SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
 }
