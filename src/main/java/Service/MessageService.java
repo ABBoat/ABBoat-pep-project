@@ -38,6 +38,10 @@ public class MessageService {
         return messageDAO.getAllMessages();
     }
 
+    public List<Message> getAllByAccount(int id) {
+        return messageDAO.getAllByAccount(id);
+    }
+
     public Message getMessageById(int id) {
         return messageDAO.getMessageById(id);
     }
