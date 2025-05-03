@@ -4,6 +4,8 @@ import Model.Message;
 import DAO.MessageDAO;
 import DAO.AccountDAO;
 
+import static org.mockito.Mockito.inOrder;
+
 import java.util.List;
 
 public class MessageService {
@@ -38,5 +40,11 @@ public class MessageService {
 
     public Message getMessageById(int id) {
         return messageDAO.getMessageById(id);
+    }
+
+    public Message deleteMessage(int id) {
+        Message intendedMessage = getMessageById(id);
+        messageDAO.deleteMessageById(id);
+        return intendedMessage;
     }
 }
