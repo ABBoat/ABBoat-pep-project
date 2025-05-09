@@ -45,8 +45,8 @@ public class AccountDAO {
             ps.setString(2, newAccount.getPassword());
             
             //SQL execution and result, auto generated account_id is returned
-            //*If a new account (id) is generated, return along with the user and pass
-            //Insert into database
+            //*If a new account (id) is generated, return along w/ the user and pass,
+            //insert into database*
             ps.executeUpdate();
             ResultSet pkeyrs = ps.getGeneratedKeys();
             if(pkeyrs.next()) {
@@ -73,7 +73,8 @@ public class AccountDAO {
             ps.setString(1, account.getUsername());
             ps.setString(2, account.getPassword());
 
-            //SQL execution and result, *While a matching entry exists, return 'true'*
+            //SQL execution and result, *While a matching entry exists, return the 
+            //(account) id, user, and pass*
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 Account loggedAccount = new Account(rs.getInt("account_id"),
