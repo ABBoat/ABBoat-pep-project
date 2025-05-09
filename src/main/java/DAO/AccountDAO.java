@@ -20,7 +20,7 @@ public class AccountDAO {
             //PreparedStatement setters
             ps.setString(1, username);
 
-            //SQL execution and result 
+            //SQL execution and result, *If a matching entry exists, return 'true'*
             ResultSet rs = ps.executeQuery();
             if(rs.next()) {
                 return true;
@@ -33,22 +33,26 @@ public class AccountDAO {
     }
 
     //Create and insert account into Account table. account_id is auto generated 
-    public Account insertAccount(Account account) {
+    public Account insertAccount(Account newAccount) {
         Connection conn = ConnectionUtil.getConnection();
         try {
+            //SQL logic
             String sql = "INSERT INTO account (username, password) VALUES (?, ?);";
             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            ps.setString(1, account.getUsername());
-            ps.setString(2, account.getPassword());
+            //PreparedStatement setters
+            ps.setString(1, newAccount.getUsername());
+            ps.setString(2, newAccount.getPassword());
             
             //SQL execution and result, auto generated account_id is returned
+            //*If a new account (id) is generated, return along with the user and pass
+            //Insert into database
             ps.executeUpdate();
             ResultSet pkeyrs = ps.getGeneratedKeys();
             if(pkeyrs.next()) {
                 int generated_account_id = (int) pkeyrs.getLong(1);
                 return new Account(generated_account_id, 
-                account.getUsername(), account.getPassword());
+                newAccount.getUsername(), newAccount.getPassword());
             }
         }
         catch(SQLException e) {
@@ -61,12 +65,15 @@ public class AccountDAO {
     public Account loginToAccount(Account account) {
         Connection conn = ConnectionUtil.getConnection();
         try {
+            //SQL logic
             String sql = "SELECT * FROM account WHERE username = ? AND password = ?;";
             PreparedStatement ps = conn.prepareStatement(sql);
 
+            //PreparedStatement setters
             ps.setString(1, account.getUsername());
             ps.setString(2, account.getPassword());
 
+            //SQL execution and result, *While a matching entry exists, return 'true'*
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 Account loggedAccount = new Account(rs.getInt("account_id"),
