@@ -106,7 +106,7 @@ public class MessageDAO {
             ps.setInt(1, id);
 
             //SQL execution and result, *While a matching entry exists, return the 
-            //(message) id, user, message content, and timestamp,
+            //(message) id, user, message content, and timestamp*
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 Message idMessage = new Message(rs.getInt("message_id"), 
@@ -141,7 +141,7 @@ public class MessageDAO {
         }
     }
 
-    //Update message by message_id
+    //Update message by message_id, return new message w/ same id
     public Message updateMessageById(int id, Message newMessage) {
         Connection conn = ConnectionUtil.getConnection();
         try {
@@ -149,9 +149,11 @@ public class MessageDAO {
             String sql = "UPDATE message SET message_text = ? WHERE message_id = ?;";
             PreparedStatement ps = conn.prepareStatement(sql);
 
+            //PreparedStatement setters
             ps.setString(1, newMessage.getMessage_text());
             ps.setInt(2, id);
 
+            //SQL execution, message is updated within database
             ps.executeUpdate();
 
         }    
