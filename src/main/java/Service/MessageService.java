@@ -25,7 +25,7 @@ public class MessageService {
     public Message addMessage(Message newMessage) {
         if(!newMessage.getMessage_text().isEmpty() 
         && newMessage.getMessage_text().length() <= 255
-        /*&& newMessage.getPosted_by() != null*/) 
+        && newMessage.getPosted_by() >= 0) 
         {
             return messageDAO.createMessage(newMessage);
         }
@@ -44,12 +44,16 @@ public class MessageService {
         return messageDAO.getMessageById(id);
     }
 
+    //Message is stored pre deletion and returned to response post deletion
     public Message deleteMessage(int id) {
         Message intendedMessage = getMessage(id);
         messageDAO.deleteMessageById(id);
         return intendedMessage;
     }
 
+    //Check conditions. Does the message we are looking to update exist?
+    //Is the  new message blank? Is the new message no more than
+    //255 charcaters?
     public Message updateMessage(int id, Message message) {
         Message targetMessage = messageDAO.getMessageById(id);
 
@@ -62,5 +66,11 @@ public class MessageService {
         }
 
         return messageDAO.updateMessageById(id, message);
+
+        /* for the update message service class method i got some advice
+         * from  a fellow cohrot. This is what we came up with. I feel like
+         * this is checking the target ,essage constraints, THEN updating 
+         * said message no? Please correct me if i'm wrong.
+         */
     }
 }

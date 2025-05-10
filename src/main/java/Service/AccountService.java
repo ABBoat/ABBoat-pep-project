@@ -3,7 +3,7 @@ package Service;
 import Model.Account;
 import DAO.AccountDAO;
 
-import java.util.List;
+//import java.util.List;
 
 public class AccountService {
     public AccountDAO accountDAO;
@@ -21,7 +21,7 @@ public class AccountService {
     //Persist account to database, check conditions. Does username already exist?
     //Any extra whitespace in username? Is password at least 4 characters?
     public Account addAccount(Account newAccount) {
-        if(!accountDAO.doesAccountExist(newAccount.getUsername())
+        if(!accountDAO.doesUsernameExist(newAccount.getUsername())
             && newAccount.getUsername().trim().length() > 0
             && newAccount.getPassword().length() >= 4) 
         {
@@ -32,7 +32,9 @@ public class AccountService {
 
     //Check conditions for login. Do username and password match an existing account?
     public Account validateAccount(Account account) {
-        if(accountDAO.doesAccountExist(account.getUsername())) {
+        if(accountDAO.doesUsernameExist(account.getUsername())
+            && accountDAO.doesPasswordExist(account.getPassword())) 
+        {
             return accountDAO.loginToAccount(account);
         }
         return null;

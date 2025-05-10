@@ -9,8 +9,8 @@ import java.sql.*;
 
 public class AccountDAO {
 
-    //Check database for username existence before insertion
-    public boolean doesAccountExist(String username) {
+    //Check database for username existence
+    public boolean doesUsernameExist(String username) {
         Connection conn = ConnectionUtil.getConnection();
         try {
             //SQL logic
@@ -19,6 +19,29 @@ public class AccountDAO {
 
             //PreparedStatement setters
             ps.setString(1, username);
+
+            //SQL execution and result, *If a matching entry exists, return 'true'*
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                return true;
+            }
+        } 
+        catch(SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
+    //Check database for password existence
+    public boolean doesPasswordExist(String password) {
+        Connection conn = ConnectionUtil.getConnection();
+        try {
+            //SQL logic
+            String sql = "SELECT * FROM account WHERE password = ?;";
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            //PreparedStatement setters
+            ps.setString(1, password);
 
             //SQL execution and result, *If a matching entry exists, return 'true'*
             ResultSet rs = ps.executeQuery();
